@@ -16,13 +16,16 @@ A lightweight Python codebase analyzer that uses Python's Abstract Syntax Tree (
 ## Project Structure
 
 ```text
+
 codelens-ai/
 ├── analyzer.py
 ├── main.py
 ├── test_analyzer.py
 ├── sample_project/
-│   └── app.py
+│   ├── app.py
+│   └── helpers.py
 └── README.md
+
 ```
 
 ## Requirements
@@ -39,6 +42,23 @@ python main.py sample_project --output report.json
 ```
 
 The program prints a summary and saves the detailed analysis to `report.json`.
+
+
+## Example Output
+
+When you run the analyzer:
+
+```bash
+python main.py sample_project --output report.json
+```
+
+The program prints a summary of the files, functions, and classes analyzed.
+It also saves a JSON report containing warnings and project dependencies.
+
+The sample project demonstrates dependency detection between `app.py`
+and `helpers.py`, along with warnings for potentially unused imports
+and functions without docstrings.
+
 
 ## Run Tests
 
