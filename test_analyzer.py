@@ -40,8 +40,10 @@ class TestAnalyzer(unittest.TestCase):
             result = analyze_file(file_path)
 
             self.assertTrue(
-                any("no docstring" in warning
-                    for warning in result["warnings"])
+                any(
+                    "no docstring" in warning
+                    for warning in result["warnings"]
+                )
             )
 
     def test_reports_syntax_error(self):
@@ -70,6 +72,49 @@ class TestAnalyzer(unittest.TestCase):
 
             self.assertEqual(report["files_analyzed"], 1)
             self.assertEqual(report["functions_found"], 1)
+
+    def test_detects_project_dependencies(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+
+            (root / "analyzer.py").write_text(
+                "def analyze():\n"
+                "    return True\n",
+                encoding="utf-8"
+            )
+
+            (root / "main.py").write_text(
+                "import analyzer\n",
+                encoding="utf-8"
+            )
+
+            report = analyze_project(root)
+
+            self.assertIn(
+                {
+                    "source": "main.py",
+                    "target": "analyzer.py",
+                    "import": "analyzer"
+                },
+                report["dependencies"]
+            )
+
+    def test_detects_unused_import(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "sample.py"
+            file_path.write_text(
+                "import os\n"
+                "def greet():\n"
+                "    return 'Hello'\n",
+                encoding="utf-8"
+            )
+
+            result = analyze_file(file_path)
+
+            self.assertIn(
+                "Unused import: os",
+                result["warnings"]
+            )
 
 
 if __name__ == "__main__":
