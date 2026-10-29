@@ -1,16 +1,16 @@
-
 # CodeLens AI 🔍
 
-A Python codebase analyzer that uses Python's Abstract Syntax Tree (AST)
-to inspect source files and generate structured reports.
+A lightweight Python codebase analyzer that uses Python's Abstract Syntax Tree (AST) to inspect source files and generate structured JSON reports.
 
 ## Features
 
 - Finds functions and classes in Python files.
 - Extracts function arguments and import statements.
 - Detects syntax errors.
-- Warns when functions are missing docstrings.
-- Generates JSON analysis reports.
+- Warns about missing function docstrings.
+- Flags potentially unused imports.
+- Maps dependencies between Python files in a project.
+- Generates structured JSON analysis reports.
 - Includes automated unit tests.
 
 ## Project Structure
@@ -27,8 +27,8 @@ codelens-ai/
 
 ## Requirements
 
-- Python 3.9 or newer
-- No external Python packages required
+- Python 3.10 or newer recommended.
+- No external Python packages required.
 
 ## Usage
 
@@ -38,8 +38,7 @@ Run the analyzer from the project directory:
 python main.py sample_project --output report.json
 ```
 
-The program prints a summary and saves the detailed analysis
-to `report.json`.
+The program prints a summary and saves the detailed analysis to `report.json`.
 
 ## Run Tests
 
@@ -49,17 +48,21 @@ python -m unittest -v test_analyzer
 
 ## How It Works
 
-Python's `ast` module parses source code into a structured tree.
-CodeLens AI traverses this tree to extract information about
-functions, classes, and imports.
+Python's built-in `ast` module parses source code into a structured tree without executing the analyzed code. CodeLens AI traverses this tree to extract information about functions, classes, and imports, detect selected code-quality issues, and identify project dependencies.
+
+## Limitations
+
+- Unused-import detection uses simple name-reference checks and may produce false positives or miss some cases.
+- Dependency mapping focuses on recognizable Python imports within the project.
+- The current version does not include an LLM or RAG integration.
 
 ## Future Improvements
 
-- Dependency mapping between project files.
-- More code-quality checks.
-- A visual dashboard.
+- More accurate scope-aware code analysis.
+- A visual dependency dashboard.
+- AI-assisted code explanations.
 - Retrieval-augmented code explanations.
 
 ## Author
 
-Created as a learning project for Python and AI engineering.
+Created as a learning project focused on Python, static analysis, and AI engineering.
